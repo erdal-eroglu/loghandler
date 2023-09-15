@@ -25,7 +25,7 @@ namespace LogHandler\Classes\Drivers\MySQL;
 
         $Migrate = new Migrate();
 
-        $Migrate->run($this->connect());
+        $Migrate->run($this->connect(),$this->getAllConfig());
 
         return $this;
 

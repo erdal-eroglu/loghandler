@@ -12,10 +12,10 @@ use PDO;
 
  class Migrate{
 
-    public function run($dbh)
+    public function run($dbh, $conf)
     {
 
-        $dbh->query("CREATE TABLE IF NOT EXISTS `lh_logs` 
+        $dbh->query("CREATE TABLE IF NOT EXISTS `".$conf['db_table']."` 
                 (
 
                     `id` int(11) NOT NULL auto_increment,   
