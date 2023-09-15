@@ -19,7 +19,8 @@ trait FolderInit{
             $allPath.=$path."/";
             
             if(!is_dir($allPath))
-                mkdir($allPath);
+            //echo $allPath;
+               mkdir($allPath);
            
         }
 

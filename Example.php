@@ -8,24 +8,50 @@ error_reporting(E_ALL);
 
 require_once __DIR__ . '/vendor/autoload.php';
 
+require_once 'ExampleMailConfig.php';
+
+require_once 'ExampleSlackConfig.php';
+
+require_once 'ExampleMysqlDriverConfig.php';
+
 use LogHandler\Classes\LogManager;
 
-use LogHandler\Classes\Drivers\FileSystem\Driver;
+use LogHandler\Classes\Drivers\FileSystem\Driver AS FileDriver;
 
-$Driver = new Driver();
+use LogHandler\Classes\Drivers\MySQL\Driver as MySQLDriver;
 
-$LogManager = new LogManager($Driver);
+use LogHandler\Classes\EventManager;
+
+use LogHandler\Classes\Events\Mail\MailSender;
+
+use LogHandler\Classes\Events\Slack\SlackPusher;
+
+$FileDriver = new FileDriver();
+
+$MySQLDriver = new MySQLDriver(ExampleMysqlDriverConfig::$conf);
 
 $message=[
 
-    "file"=>"Dosya.php",
+    'file' => __FILE__,
 
-    "line"=>"25",
+    'line' => __LINE__,
 
-    "error"=>"Hata Mesajı",
+    "error"=>"xcxcxxc xc x Mesajı",
 
-    "code"=>"1005"
+    "code"=>"55555",
+
+    "comment"=>"null"
 
 ];
 
-$LogManager->write($message)->event('mail-send');
+$LogManager     = new LogManager($MySQLDriver);
+
+$SlackEvent     = new SlackPusher(ExampleSlackConfig::$config); 
+
+$MailEvent      = new MailSender(ExampleMailConfig::$config); 
+
+$EventManager   = new EventManager();
+
+#$EventManager->setMessage($message)->event($MailEvent)->event($SlackEvent);
+
+$LogManager->write($message)->event($MailEvent)->event($SlackEvent);

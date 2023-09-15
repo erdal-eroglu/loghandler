@@ -2,52 +2,34 @@
 
 namespace LogHandler\Classes;
 
-/*
- *
- * Erdal EROĞLU <erdal@istanbul-soft.com.tr>
- *
- * 01-09-2020
- *
- */
+/**
+*@Author-Name   : Erdal EROĞLU 
+*@Author-Mail   : erdal.eroglu@gmail.com
+*@Create-Date   : dd-mm-YYYY
+**/
+
 
 use LogHandler\Classes\Drivers\IDriver;
-use LogHandler\Classes\EventList;
+use LogHandler\Classes\EventManager;
 
-class LogManager {
+class LogManager extends EventManager {
     
-    private static IDriver $driver;
-
-    private static array $msg;
+    private  IDriver $driver;
 
     public function __construct(IDriver $driver){
 
-        self::$driver = $driver;
+        $this->driver = $driver;
 
     }  
 
     public function write(Array $message):LogManager{
+     
+        $this->driver->init()->append($message);
 
-        self::$driver->append($message);
-
-        self::$msg  = $message;
+        $this->msg  = $message;
         
         return $this;
+
     }
-
-    public function event(String $eventName):LogManager{
-
-        if(EventList::$list[$eventName]){
-
-            $obj = new EventList::$list[$eventName];
-
-            $obj->set(self::$msg);
-
-            $obj->run();
-
-        }
-
-        return $this;
-
-    }  
 
 }

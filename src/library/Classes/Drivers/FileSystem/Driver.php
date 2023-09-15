@@ -2,18 +2,42 @@
 
 namespace LogHandler\Classes\Drivers\FileSystem;
 
-/*
- *
- * Erdal EROĞLU <erdal@istanbul-soft.com.tr>
- *
- * 02-09-2020
- *
- */
+/**
+*@Author-Name   : Erdal EROĞLU 
+*@Author-Mail   : erdal.eroglu@gmail.com
+*@Create-Date   : dd-mm-YYYY
+**/
+
 
  use LogHandler\Classes\Drivers\IDriver;
 
- class Driver extends Config implements IDriver{
 
+ class Driver extends File implements IDriver{
+
+    public Array  $lastFile;
+
+    public String $fileName;
+
+    public function init():IDriver
+    {
+
+        $errorFolderPath = rtrim(self::$confArr['storage_path']);
+
+        \LogHandler\Traits\FolderInit::createPath($errorFolderPath);
+
+        $this->lastFile =Control::getLastFile();
+
+        $this->fileName = basename($this->lastFile['fileName']);
+
+        $this->create();
+
+        $this->reCreate(); 
+
+        return $this;
+
+    }
+
+    
     /*
     *
     * Method file Systeme Yazılmasını Sağlıyor
@@ -22,45 +46,24 @@ namespace LogHandler\Classes\Drivers\FileSystem;
     *
     * @param String $message
     *
-    * @return Array
+    * @return void
     *
     */
 
-    public function append(Array $message):Array{
+    public function append(Array $message):void{
 
-        $errorFolderPath = rtrim(self::$confArr['storage_path']);
+        
+        $file   = $message['file']??"NULL";
 
-        \LogHandler\Traits\FolderInit::createPath($errorFolderPath);
+        $line   = $message['line']??"NULL";
 
-        $lastFile =Init::getLastFile();
+        $error  = $message["error"]??"NULL";
 
-        $fileName = basename($lastFile['fileName']);
+        $code   = $message["code"]??"NULL";
 
-        if(Init::fileExceedControl($lastFile) && $lastFile['fileName']!=""){
-
-            $file   = $message['file']??"NULL";
-
-            $line   = $message['line']??"NULL";
-
-            $error  = $message["error"]??"NULL";
-
-            $code   = $message["code"]??"NULL";
-
-            $line =date('Y-m-d H:i:s')." | File : $file | Line : $line | Message : $error | Code : $code \n \n";
-
-            file_put_contents($lastFile['fileName'],$line,FILE_APPEND);
-
-        }else{
-
-            $fileName = (int) substr($fileName, 0, strrpos($fileName, "."));
-
-            $fileName++;
-
-            touch(self::$confArr['storage_path']."/".$fileName.self::$confArr['file_extension']);
-
-        }
-
-        return array();
+        $line =date('Y-m-d H:i:s')." | File : $file | Line : $line | Message : $error | Code : $code \n \n";
+        
+        file_put_contents(self::$confArr['storage_path']."/".$this->fileName,$line,FILE_APPEND | LOCK_EX);
 
     }
 

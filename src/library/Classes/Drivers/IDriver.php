@@ -2,16 +2,24 @@
 
 namespace LogHandler\Classes\Drivers;
 
-
-/*
- *
- * Erdal EROĞLU <erdal@istanbul-soft.com.tr>
- *
- * 02-09-2020
- *
- */
+/**
+*@Author-Name   : Erdal EROĞLU 
+*@Author-Mail   : erdal.eroglu@gmail.com
+*@Create-Date   : dd-mm-YYYY
+**/
 
 interface IDriver{
+
+
+        /*
+    *
+    * @method public append 
+    * 
+    * @param String $message
+    *
+    */
+    public function init():IDriver;
+
 
     /*
     *
@@ -20,7 +28,7 @@ interface IDriver{
     * @param String $message
     *
     */
-    public function append(Array $message):Array;
+    public function append(Array $message):Void;
 
 
 }

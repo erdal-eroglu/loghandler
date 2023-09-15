@@ -1,6 +1,6 @@
 <?php
 
-namespace  LogHandler\Classes\Drivers\FileSystem;
+namespace  LogHandler\Classes\Drivers\MySQL;
 
 use LogHandler\Classes\IConfig;
 
@@ -25,32 +25,54 @@ use LogHandler\Classes\IConfig;
     [
 
             /*
-            *  [(int) file_exceed_byte] 
+            *  
             *
-            * Yeni Dosyanın Oluşturulması 
-            * İçin Eski Dosyanın Boyutu Kaç BYTE a Ulaşmalı
+            * Mysql host ip or domain
             *
             */
 
-            'file_exceed_byte'  => 10485760, //10MB
+            'db_host'  => '172.28.1.4', //10MB
 
             /*
-            * [(String) storage_path]
             *
-            * Log Dosyalarınn Oluşturulacağı Path
+            * DB for Logger
             *
             */
 
-            'file_extension'      => '-handler.log',                        
+            'db_name'      => 'log_handler',                        
 
             /*
-            * [(String) storage_path]
-            *
-            * Log Dosyalarınn Oluşturulacağı Path
+            * 
+            *  Table Name 
             *
             */
 
-            'storage_path'      => 'lh-storage',
+            'db_table'      => 'lh_logs',                        
+
+            /*
+            *
+            * Database User Name
+            *
+            */            
+
+            'db_user'      => 'root',
+
+
+            /*
+            * 
+            *  Database Password
+            *
+            */
+
+            'db_password'      => 'root1pass',   
+            
+            /*
+            * 
+            * Mysql Port
+            *
+            */
+
+            'db_port'      => 3306,   
 
     ]; 
 
